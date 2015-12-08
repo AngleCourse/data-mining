@@ -4,29 +4,37 @@ data structure:
 				2. nds查询只返回根域名服务器地址的记录删除
 				3. dns查询返回两个或两个以上的相同dns服务器地址的记录删除
 				4. 
-	class log_initial{
-		ID: 每读一条记录就给一个唯一的ID
-		time_initial;
-		host_initial;
-		url_initial;
-		dns_initial;
+	class LogList{
+		long 		getNumofLogs();	
+		// 生成所有的Logentry放在数组里，数组的大小用NumofLogs返回
+		LogEntry[]	getLogs();
 	}
-	class time_initial{
+	class LogEntry{
+		ID: 每读一条记录就给一个唯一的ID
+		long getID();
+		TimeInitial getTime();
+		HostInitial getHost();
+		URLInitial getURL();
+		String getDefaultDNS();
+		DNSInitial getDNS();
+	}
+	class TimeInitial{
 		public String getHour();
 		public String getMin();
 		public String getSec();
+		// time的剩余字段
 		public String getMill();
 	}
-	class host_initial{
+	class HostInitial{
 		String getIP();
 	}
-	class url_initial{
+	class URLInitial{
 		String getURL();
 	}
-	class dns_initial{
-		String getFirst();
-		String hasNext();
-		String getNext();
+	class DNSInitial{
+		// 字段不包括默认网关的NDS地址
+		int getNumofDNS();
+		String[] getDNS();
 	}
 算法部分：返回整个频繁项集,只保证正确性
 	Min_surpport 		= 
