@@ -44,6 +44,10 @@ class LogList{
         std::vector<LogEntry> logs;
         std::vector<LogEntry>::iterator it;
 };
-
+/**
+ * 从给定的文件中读出所有日志, num 指定日志文件的数量
+ * eg:  LogList[0] 中保存从第一个文件中读出的日志
+ *      LogList[1] 中保存从第二个文件中读出的日志
+ */
 LogList** loadfiles(string* files, int num);
 #endif

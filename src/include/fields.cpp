@@ -6,7 +6,7 @@
 #include <sstream> //std::isstringstream
 #include <string>
 #include "./fields.h"
-#define DEBUG
+//#define DEBUG
 using std::string;
 TimeInitial::TimeInitial(string& time){
    (this->time).assign(time); 

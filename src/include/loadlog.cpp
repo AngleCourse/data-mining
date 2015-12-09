@@ -3,8 +3,8 @@
 #include <vector>
 #include "./fields.h"
 #include "./loadlog.h"
-#define DEBUG
-#define D_LOAD_LENGTH 100
+//#define DEBUG
+//#define D_LOAD_LENGTH 100
 using std::string;
 using std::ifstream;
 using std::getline;
@@ -12,14 +12,19 @@ using std::getline;
 // 容器的默认容量
 const long INITIAL_SIZE = 200000;
 
+
 LogList** loadfiles(string* files, int num){
     LogList** loglists = new LogList*[num];
     for(int i = 0; i<num; i++){
         // ifstream(const char *, openmode)
         // So needs a type cast. 
+        if(files[i].empty()){
+            continue;
+        }
         ifstream input(files[i].c_str(), std::ifstream::in);
         LogList log(input);
         loglists[i] = &log;
+        input.close();
     }
 }
 LogList::LogList(ifstream & input){
@@ -65,7 +70,7 @@ void LogList::loadlogs(ifstream & input){
 		getline(input, field, '|');
         host.assign(field);
 		getline(input, field, '|');
-        url.assign(field);
+        url.assign(field.substr(field.find("?", 0)+2));
 		getline(input, field, '|');
         defdns.assign(field);
 		getline(input, field);
@@ -75,7 +80,6 @@ void LogList::loadlogs(ifstream & input){
 		logs.push_back(entry);
 #ifdef DEBUG
         if(logs.size() > D_LOAD_LENGTH){
-            input.close();
             break;
         }
 #endif
