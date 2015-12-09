@@ -27,6 +27,7 @@ class TimeInitial{
          * 返回此时间字段对应的毫秒
          */
         string getMill();
+        string toString();
     private:
         // Corresponding to the 'time' field in the log record
         string time;
@@ -74,13 +75,21 @@ class DNSInitial{
          * 返回本次DNS查询中所有由本地域名服务器发起查询的DNS服务器的地址
          */
         string* getDNS();
+        /**
+         * 根据原始的DNS字串重新生成单个DNS的数组, 主要是为了防止在后续的
+         * 计算中弄乱DNS数组
+         */
+        void remap();
     private:
         // Corresponding 'DNS' field in every log record, exclude the IP address
         // of local default DNS server.
         string dns;
+        string* seperate_dns;
+
 };
 class LogEntry{
     public:
+        LogEntry();
         LogEntry(long id, string time, string host, string url, string defdns, string dns);
         /**
          * 返回本条日志对应的ID序号

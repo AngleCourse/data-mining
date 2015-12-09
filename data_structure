@@ -7,7 +7,7 @@ data structure:
 	class LogList{
 		long 		getNumofLogs();	
 		// 生成所有的Logentry放在数组里，数组的大小用NumofLogs返回
-		LogEntry[]	getLogs();
+		LogEntry	getLogs();
 	}
 	class LogEntry{
 		ID: 每读一条记录就给一个唯一的ID
