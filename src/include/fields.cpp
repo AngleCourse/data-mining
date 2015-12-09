@@ -2,8 +2,11 @@
 /**
  * 本文件实现了访问日志和日志各字段的接口
  */
-#include <algorithm>
+#include <algorithm>//std::count
+#include <sstream> //std::isstringstream
+#include <string>
 #include "./fields.h"
+using std::string;
 TimeInitial::TimeInitial(string time){
    this->time = time; 
 }
@@ -38,32 +41,70 @@ string URLInitial::getURL(){
 }
 
 DNSInitial::DNSInitial(string dns){
-    int count = 0;
-
-	seperate_dns = new string[dns.]	
-	this->dns 	= dns;
+    numofdns = std::count(dns.begin(),
+            dns.end(), '|');
+	seperate_dns = new string[numofdns];
+    std::istringstream iss (dns);
+    for(int i = 0; !std::getline(iss, seperate_dns[i], '|').eof();i++);
+    this->dns 	= dns;
+}
+int DNSInitial::getNumofDNS(){
+    return numofdns;
+}
+string* DNSInitial::getDNS(){
+    return seperate_dns;
+}
+void DNSInitial::remap(){
+    delete [] seperate_dns;
+    seperate_dns = new string[numofdns];
+    std::istringstream iss (dns);
+    for(int i = 0; !std::getline(iss, seperate_dns[i], '|').eof();i++);
+}
+string DNSInitial::toString(){
+#ifdef DEBUG
+    string s;
+    for(int i = 0; i< numofdns; i++){
+        s = s +" " + seperate_dns[i];
+    }
+    return s;
+#endif
+    return dns;
+}
+DNSInitial::~DNSInitial(){
+    delete [] seperate_dns;
+}
+LogEntry::LogEntry(){
+    this->id = 0;
+    this->time = NULL;
+    this->host = NULL;
+    this->url  = NULL;
+    this->defdns = new string("");
+    this->dns  = NULL;
 }
 
 LogEntry::LogEntry(long id, string time, string host, string url, string defdns, string dns){
-	this->id 	= id;
-	this->time 	= time;
-	this->host 	= host;
-	this->url 	= url;
-	this->defdns= defdns;
-	this->dns 	= dns;	
+	this->id = id;
+	this->time = new TimeInitial(time);
+	this->host = new HostInitial(host);
+	this->url  = new URLInitial(url);
+    this->defdns= new string(defdns);
+	this->dns  = new DNSInitial(dns);	
 }
-TimeInitial LogEntry::getTime(){
-	return time;
+TimeInitial LogEntry::getTime() const{
+	return *time;
 }
-HostInitial LogEntry::getHost(){
-	return host;
+HostInitial LogEntry::getHost() const{
+    return *host;
 }
-URLInitial LogEntry::getURL(){
-	return url;
+URLInitial LogEntry::getURL() const{
+	return *url;
 }
-string LogEntry::getDefaultDNS(){
-	return defdns;
+string LogEntry::getDefaultDNS() const{
+	return *defdns;
 }
-DNSInitial LogEntry::getDNS(){
-	return dns;
+DNSInitial LogEntry::getDNS() const{
+	return *dns;
+}
+bool LogEntry::isEmpty(){
+    return id == 0; 
 }

@@ -80,10 +80,13 @@ class DNSInitial{
          * 计算中弄乱DNS数组
          */
         void remap();
+        string toString();
+        ~DNSInitial();
     private:
         // Corresponding 'DNS' field in every log record, exclude the IP address
         // of local default DNS server.
         string dns;
+        int numofdns;
         string* seperate_dns;
 
 };
@@ -98,36 +101,41 @@ class LogEntry{
         /**
          * 返回本条日志的时间字段
          */
-        TimeInitial getTime();
+        TimeInitial getTime() const;
         /**
          * 返回发起DNS查询的用户主机
          */
-        HostInitial getHost();
+        HostInitial getHost() const;
         /**
          * 返回用户主机请求的URL
          */
-        URLInitial getURL();
+        URLInitial getURL() const;
         /**
          * 返回本地DNS服务器地址
          */
-        string getDefaultDNS();
+        string getDefaultDNS() const;
         /**
          * 返回所有本地DNS服务器发起查询的DNS服务器
          */
-        DNSInitial getDNS();
+        DNSInitial getDNS() const;
+        /**
+         * 返回本条日志记录是否为空；仅当日志为空时，
+         * 才返回 false 
+         */
+        bool isEmpty();
     private:
         // Log ID
         long id;
         // Time to start request DNS translate
-        TimeInitial time;
+        TimeInitial* time;
         // Host of DNS request
-        HostInitial Host;
+        HostInitial* host;
         // Request URL
-        URLInitial url;
+        URLInitial* url;
         // Local DNS server
-        string defdns;
+        string* defdns;
         // All of the DNS Server envolved during a DNS translation, except
         // the loal DNS server.
-        DNSInitial dns;
+        DNSInitial* dns;
 };
 #endif

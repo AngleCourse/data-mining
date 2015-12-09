@@ -2,13 +2,28 @@
 #include <fstream>
 #include <vector>
 #include "./fields.h"
-#include "loadlog.h"
+#include "./loadlog.h"
 using std::string;
 using std::ifstream;
-LogList::LogList(ifstream input){
-	logs.reserve(LogList::INITIAL_SIZE);
+using std::getline;
+
+// 容器的默认容量
+const long INITIAL_SIZE = 200000;
+
+LogList** loadfiles(string* files, int num){
+    LogList** loglists = new LogList*[num];
+    for(int i = 0; i<num; i++){
+        // ifstream(const char *, openmode)
+        // So needs a type cast. 
+        ifstream input(files[i].c_str(), std::ifstream::in);
+        LogList log(input);
+        loglists[i] = &log;
+    }
+}
+LogList::LogList(ifstream & input){
+	logs.reserve(INITIAL_SIZE);
 	// 下面开始加载
-	loadlog(input);
+	loadlogs(input);
 	// 重置迭代器
 	reset();
 }
@@ -20,7 +35,7 @@ LogEntry LogList::getNextLogEntry(){
 		/* code */
 		return *it++;
 	}else{
-		return NULL;
+		return LogEntry();
 	}
 }
 void LogList::reset(){
@@ -40,7 +55,7 @@ void LogList::print(int num){
     			<<" "<<entry.getDNS().toString()<<std::endl;		
     }
 }
-void LogList::loadlogs(ifstream input){
+void LogList::loadlogs(ifstream & input){
 	string field;
 	string time, host, url, defdns, dns;
 	while(!getline(input, field, '|').eof()){
@@ -53,8 +68,14 @@ void LogList::loadlogs(ifstream input){
 		defdns = field;
 		getline(input, field);
 		dns 	= field.substr(0, field.size()-1);
-		LogEntry entry = LogEntry(time, host, url, defdns, dns)
+		LogEntry entry = LogEntry(logs.size()+1, time, host, url, defdns, dns);
 		logs.push_back(entry);
+#ifdef DEBUG
+        if(logs.size() > D_LOAD_LENGTH){
+            input.close();
+            break;
+        }
+#endif
 	}	
 }
 

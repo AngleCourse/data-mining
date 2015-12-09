@@ -6,6 +6,7 @@
 #include "./fields.h"
 
 
+extern const long INITIAL_SIZE;
 
 /**
  * 将日志文件加载进内存, 并且转化成数组格式再用于数据挖掘的核心算法
@@ -15,7 +16,7 @@ class LogList{
         /**
          * 从"input"中加载日志文件到内存中
          */
-        LogList(std::ifstream input);
+        LogList(std::ifstream & input);
         /**
          * 返回本次加载的日志数量
          */
@@ -39,9 +40,10 @@ class LogList{
         /**
          * Load log file from the specified input.
          */
-        void loadlogs(std::ifstream input);
-        const long INITIAL_SIZE 200000;
+        void loadlogs(std::ifstream & input);
         std::vector<LogEntry> logs;
         std::vector<LogEntry>::iterator it;
 };
+
+LogList** loadfiles(string* files, int num);
 #endif
