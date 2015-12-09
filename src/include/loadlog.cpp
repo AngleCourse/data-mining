@@ -3,6 +3,8 @@
 #include <vector>
 #include "./fields.h"
 #include "./loadlog.h"
+#define DEBUG
+#define D_LOAD_LENGTH 100
 using std::string;
 using std::ifstream;
 using std::getline;
@@ -57,17 +59,18 @@ void LogList::print(int num){
 }
 void LogList::loadlogs(ifstream & input){
 	string field;
-	string time, host, url, defdns, dns;
+	string time, host, url, defdns,dns;
 	while(!getline(input, field, '|').eof()){
-		time = field;
+		time.assign(field);
 		getline(input, field, '|');
-		host = field;
+        host.assign(field);
 		getline(input, field, '|');
-		url = field;
+        url.assign(field);
 		getline(input, field, '|');
-		defdns = field;
+        defdns.assign(field);
 		getline(input, field);
-		dns 	= field.substr(0, field.size()-1);
+        //eliminate \r.
+        dns.assign(field.substr(0, field.size()-1));
 		LogEntry entry = LogEntry(logs.size()+1, time, host, url, defdns, dns);
 		logs.push_back(entry);
 #ifdef DEBUG
@@ -77,6 +80,9 @@ void LogList::loadlogs(ifstream & input){
         }
 #endif
 	}	
+#ifdef DEBUG
+    this->print(D_LOAD_LENGTH);
+#endif
 }
 
 

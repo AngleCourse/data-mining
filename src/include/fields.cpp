@@ -6,9 +6,10 @@
 #include <sstream> //std::isstringstream
 #include <string>
 #include "./fields.h"
+#define DEBUG
 using std::string;
-TimeInitial::TimeInitial(string time){
-   this->time = time; 
+TimeInitial::TimeInitial(string& time){
+   (this->time).assign(time); 
 }
 string TimeInitial::getHour(){
     return time.substr(0, 2);
@@ -26,27 +27,27 @@ string TimeInitial::toString(){
 	return getHour()+":"+getMin()+":"+getSec()+"."+getMill();
 }
 
-HostInitial::HostInitial(string host){
-    this->ip = host;
+HostInitial::HostInitial(string& host){
+    (this->ip).assign(host);
 }
 string HostInitial::getIP(){
     return ip;
 }
 
-URLInitial::URLInitial(string url){
-    this->url = url;
+URLInitial::URLInitial(string& url){
+    (this->url).assign(url);
 }
 string URLInitial::getURL(){
 	return url;
 }
 
-DNSInitial::DNSInitial(string dns){
+DNSInitial::DNSInitial(string & dns){
     numofdns = std::count(dns.begin(),
             dns.end(), '|');
 	seperate_dns = new string[numofdns];
     std::istringstream iss (dns);
-    for(int i = 0; !std::getline(iss, seperate_dns[i], '|').eof();i++);
-    this->dns 	= dns;
+    for(int i = 0; i < numofdns && !std::getline(iss, seperate_dns[i], '|').eof();i++);
+    (this->dns).assign(dns);
 }
 int DNSInitial::getNumofDNS(){
     return numofdns;
@@ -78,17 +79,19 @@ LogEntry::LogEntry(){
     this->time = NULL;
     this->host = NULL;
     this->url  = NULL;
-    this->defdns = new string("");
     this->dns  = NULL;
 }
 
-LogEntry::LogEntry(long id, string time, string host, string url, string defdns, string dns){
+LogEntry::LogEntry(long id, string& time, string & host, string & url, string & defdns, string & dns){
 	this->id = id;
 	this->time = new TimeInitial(time);
 	this->host = new HostInitial(host);
 	this->url  = new URLInitial(url);
-    this->defdns= new string(defdns);
+    (this->defdns).assign(defdns);
 	this->dns  = new DNSInitial(dns);	
+}
+long LogEntry::getID(){
+    return this->id;
 }
 TimeInitial LogEntry::getTime() const{
 	return *time;
@@ -100,7 +103,7 @@ URLInitial LogEntry::getURL() const{
 	return *url;
 }
 string LogEntry::getDefaultDNS() const{
-	return *defdns;
+    return defdns;
 }
 DNSInitial LogEntry::getDNS() const{
 	return *dns;

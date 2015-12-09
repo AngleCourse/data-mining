@@ -3,9 +3,6 @@
 #include <fstream>
 #include "./include/loadlog.h"
 #include "./include/fields.h"
-#ifdef DEBUG
-#define D_LOAD_LENGTH 10
-#endif
 using std::cout;
 using std::ifstream;
 extern LogList ** loadfiles(string *files, int num);

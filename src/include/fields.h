@@ -10,7 +10,7 @@ using std::string;
  */
 class TimeInitial{
     public:
-        TimeInitial(string time);
+        TimeInitial(string & time);
         /**
          * 返回此时间字段对应的小时,即为主机在一天的几点发起的DNS请求
          */
@@ -37,7 +37,7 @@ class TimeInitial{
  */
 class HostInitial{
     public:
-        HostInitial(string host);
+        HostInitial(string & host);
         /**
          * 返回主机IP地址
          */
@@ -51,7 +51,7 @@ class HostInitial{
  */
 class URLInitial{
     public:
-        URLInitial(string url);
+        URLInitial(string& url);
         /**
          * 返回URL
          */
@@ -66,7 +66,7 @@ class URLInitial{
  */
 class DNSInitial{
     public:
-        DNSInitial(string dns);
+        DNSInitial(string & dns);
         /**
          * 返回本次DNS查询中所有由本地域名服务器发起查询的DNS服务器的数量
          */
@@ -93,7 +93,7 @@ class DNSInitial{
 class LogEntry{
     public:
         LogEntry();
-        LogEntry(long id, string time, string host, string url, string defdns, string dns);
+        LogEntry(long id, string& time, string & host, string & url, string & defdns, string & dns);
         /**
          * 返回本条日志对应的ID序号
          */
@@ -133,7 +133,7 @@ class LogEntry{
         // Request URL
         URLInitial* url;
         // Local DNS server
-        string* defdns;
+        string defdns;
         // All of the DNS Server envolved during a DNS translation, except
         // the loal DNS server.
         DNSInitial* dns;
