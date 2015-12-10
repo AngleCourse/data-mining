@@ -32,6 +32,7 @@ class LogList{
          * 重置迭代器，getNextLogEntry下次返回第一条日志记录
          */
         void reset();
+        std::vector<LogEntry> getLogs();
         /**
          * 打印读入的前 num 条日志, 只用于测试
          */

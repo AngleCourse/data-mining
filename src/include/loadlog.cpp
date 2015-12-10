@@ -26,6 +26,10 @@ LogList** loadfiles(string* files, int num){
         loglists[i] = &log;
         input.close();
     }
+    return loglists;
+}
+std::vector<LogEntry> LogList::getLogs(){
+    return logs;
 }
 LogList::LogList(ifstream & input){
 	logs.reserve(INITIAL_SIZE);
@@ -60,6 +64,7 @@ void LogList::print(int num){
     			<<" "<<entry.getHost().getIP()<<" "<<
     			entry.getURL().getURL()<<" "<<entry.getDefaultDNS()
     			<<" "<<entry.getDNS().toString()<<std::endl;		
+        std::cout.flush();
     }
 }
 void LogList::loadlogs(ifstream & input){
@@ -77,7 +82,9 @@ void LogList::loadlogs(ifstream & input){
         //eliminate \r.
         dns.assign(field.substr(0, field.size()-1));
 		LogEntry entry = LogEntry(logs.size()+1, time, host, url, defdns, dns);
-		logs.push_back(entry);
+        if(!(entry.getDNS().getNumofDNS() == 0)){
+		    logs.push_back(entry);
+        }
 #ifdef DEBUG
         if(logs.size() > D_LOAD_LENGTH){
             break;

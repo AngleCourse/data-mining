@@ -16,8 +16,13 @@ void testloading(){
     cout<< "Starting to test loading module...\n";
     const int num_files = 5;
     string* filenames = new string[num_files];
-    filenames[0] = "../raw/CSession_01";
+    filenames[0].assign("../raw/CSession_01");
     LogList ** loglists = loadfiles(filenames, num_files);
+    for(int i = 0; ((i <num_files) && (!filenames[i].empty())); i++){
+        cout<<"File: "<<filenames[i]
+            <<" Loads " << (*loglists[i]).getNumofLogs()
+            <<"logs\n";       
+    }
     delete [] filenames;
     cout<< "Testing done.\n";
 }

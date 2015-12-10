@@ -83,6 +83,12 @@ class DNSInitial{
         string toString();
         ~DNSInitial();
     private:
+        /**
+         * 过滤DNS记录，如果传入的记录不符合要求，就过滤掉这条DNS，
+         * 返回过滤后可用的DNS服务器地址数量，并且在内部结构中设置
+         * 好各个DNS分量
+         */
+        int filter(int num, string & dns);
         // Corresponding 'DNS' field in every log record, exclude the IP address
         // of local default DNS server.
         string dns;
@@ -94,6 +100,7 @@ class LogEntry{
     public:
         LogEntry();
         LogEntry(long id, string& time, string & host, string & url, string & defdns, string & dns);
+        ~LogEntry();
         /**
          * 返回本条日志对应的ID序号
          */
