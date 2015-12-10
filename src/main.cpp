@@ -1,6 +1,7 @@
 
 #include "./include/loadlog.h"
 #include "./include/fpphasea.h"
+#include "./include/fpphaseb.h"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ void testing(){
     filenames[5].assign("../raw/CSession_30");
     filenames[6].assign("../raw/CSession_31");
     LogList ** loglists = loadfiles(filenames, num_files);
+    delete [] filenames;
     cout<<"Test loading module done\n";
 
     cout<<"Starting to test Precomputing module...\n";
@@ -32,6 +34,10 @@ void testing(){
     count_sort_ip(tran_ip, order, count);
     sort_transaction(tran_ip, order); 
     cout<<"Testing done.\n";
-    delete [] filenames;
+
+    cout<<"Starting to test FP-Tree building module...\n";
+    testfptree(tran_ip);
+     
+    cout<<"Testing done.\n";
     
 }
