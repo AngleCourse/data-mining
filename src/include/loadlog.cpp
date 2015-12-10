@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <ctime> //clock, clock_t, CLOCKS_PER_SEC
 #include "./fields.h"
 #include "./loadlog.h"
 //#define DEBUG
@@ -15,6 +16,7 @@ const long INITIAL_SIZE = 200000;
 
 LogList** loadfiles(string* files, int num){
     LogList** loglists = new LogList*[num];
+    clock_t t;
     for(int i = 0; i<num; i++){
         // ifstream(const char *, openmode)
         // So needs a type cast. 
@@ -22,7 +24,13 @@ LogList** loadfiles(string* files, int num){
             continue;
         }
         ifstream input(files[i].c_str(), std::ifstream::in);
+        std::cout<<"Starting loading log file: "<<files[i];
+        t = clock();
         LogList log(input);
+        t = clock()-t;
+        std::cout<<", loads "<< log.getNumofLogs() <<" logs in "
+            <<((float)t)/CLOCKS_PER_SEC<<" seconds\n";
+
         loglists[i] = &log;
         input.close();
     }
@@ -38,7 +46,7 @@ LogList::LogList(ifstream & input){
 	// 重置迭代器
 	reset();
 }
-long LogList::getNumofLogs(){
+int LogList::getNumofLogs(){
     return logs.size();
 }
 LogEntry LogList::getNextLogEntry(){
@@ -56,7 +64,7 @@ void LogList::print(int num){
 #ifndef DEBUG
     return;
 #endif
-    num = num > logs.size()?logs.size():num;
+    num = (num > (int)logs.size())?logs.size():num;
     LogEntry entry;
     std::vector<LogEntry>::iterator it1 = logs.begin();
     for(int i = 1; i <= num; i++){

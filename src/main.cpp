@@ -9,7 +9,7 @@ using namespace std;
 extern LogList ** loadfiles(string *files, int num);
 void testing();
 
-vector<  vector<int>  > trans_ip_int(vector<LogEntry> &entry_ip,map<string,int> &ip_map);
+vector<  vector<int>  > trans_ip_int(const vector<LogEntry> &entry_ip,map<string,int> &ip_map);
 void count_sort_ip(vector< vector<int> > &ip_int_link, vector<int>  &order, vector<int>  &count);
 void sort_transaction(vector<  vector<int>  > &unsorted_transaction, vector<int>  order);
 int   max_index(const  vector<int>  & ivec);
@@ -27,7 +27,7 @@ void testing(){
     cout<< "Testing done.\n";
     cout<<"Starting to test Precomputing module...\n";
     map<string, int> ip_map;
-    vector<  vector<int>  > tran_ip = trans_ip_int((*loglists[0]).getLogs(), ip_map);   
+    vector<  vector<int>  > tran_ip = trans_ip_int((loglists[0]->getLogs()), ip_map);   
     vector<int>  order, count;
     count_sort_ip(tran_ip, order, count);
     sort_transaction(tran_ip, order); 
@@ -42,13 +42,13 @@ cout<<"no error!"<<endl;
 }
 */
 
-vector< vector<int> > trans_ip_int(vector<LogEntry> &entry_t, map<string,int> &ip_map)
+vector< vector<int> > trans_ip_int(const vector<LogEntry> &entry_t, map<string,int> &ip_map)
 {
 	vector< vector<int> > entry_int_link;
 	for(int i=0;i<entry_t.size();i++)
 	{
-		string *s = entry_t[i].getDefaultDNS().getDNS();
-		for(int j=0;j<entry_t[i].getDefaultDNS().getNumofDNS();j++)
+		string *s = entry_t[i].getDNS().getDNS();
+		for(int j=0;j<entry_t[i].getDNS().getNumofDNS();j++)
 		{
 			map<string ,int >::iterator I_ip;
 			I_ip = ip_map.find(s[j]);

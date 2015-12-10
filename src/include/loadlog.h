@@ -20,7 +20,7 @@ class LogList{
         /**
          * 返回本次加载的日志数量
          */
-        long getNumofLogs();
+        int getNumofLogs();
         /**
          * 从第一条日志开始逐条返回日志记录。
          * 
