@@ -61,9 +61,10 @@ int DNSInitial::filter(int num, string & dns){
         //下面检测是否会有连续的两个或两个以上DNS服务器地址
         //这种情况是本地服务器重复请求
         if(!last.empty() && (last.compare(seperate_dns[i]) == 0)){
-            for(int j = 0; j <= i; j++){
-                seperate_dns[i].clear();
-            }
+#ifdef DEBUG
+            std::cout<<"last: " <<last
+                <<" current: "<<seperate_dns[i]<<" \n";
+#endif
             return 0;
         }
         last.assign(seperate_dns[i]);
@@ -74,7 +75,7 @@ string* DNSInitial::getDNS(){
     return seperate_dns;
 }
 void DNSInitial::remap(){
-    delete [] seperate_dns;
+    delete[] seperate_dns;
     seperate_dns = new string[numofdns];
     std::istringstream iss (dns);
     for(int i = 0; !std::getline(iss, seperate_dns[i], '|').eof();i++);
@@ -109,10 +110,10 @@ LogEntry::LogEntry(long id, string& time, string & host, string & url, string & 
 	this->dns  = new DNSInitial(dns);	
 }
 LogEntry::~LogEntry(){
-    //delete this->time;
-    //delete this->host;
-    //delete this->url;
-    //delete this->dns;
+    delete this->time;
+    delete this->host;
+    delete this->url;
+    delete this->dns;
 }
 long LogEntry::getID(){
     return this->id;

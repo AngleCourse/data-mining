@@ -26,12 +26,12 @@ LogList** loadfiles(string* files, int num){
         ifstream input(files[i].c_str(), std::ifstream::in);
         std::cout<<"Starting loading log file: "<<files[i];
         t = clock();
-        LogList log(input);
+        LogList* log = new LogList(input);
         t = clock()-t;
-        std::cout<<", loads "<< log.getNumofLogs() <<" logs in "
+        std::cout<<", loads "<< log->getNumofLogs() <<" logs in "
             <<((float)t)/CLOCKS_PER_SEC<<" seconds\n";
 
-        loglists[i] = &log;
+        loglists[i] = log;
         input.close();
     }
     return loglists;
@@ -65,15 +65,13 @@ void LogList::print(int num){
     return;
 #endif
     num = (num > (int)logs.size())?logs.size():num;
-    LogEntry entry;
     std::vector<LogEntry>::iterator it1 = logs.begin();
     for(int i = 1; i <= num; i++){
-    	entry = *it1++;
-    	std::cout<<entry.getID()<<": "<<entry.getTime().toString()
-    			<<" "<<entry.getHost().getIP()<<" "<<
-    			entry.getURL().getURL()<<" "<<entry.getDefaultDNS()
-    			<<" "<<entry.getDNS().toString()<<std::endl;		
-        std::cout.flush();
+    	std::cout<<it->getID()<<": "<<it->getTime().toString();
+        std::cout<<" "<<it->getHost().getIP()<<" "<<
+    			it->getURL().getURL()<<" "<<it->getDefaultDNS()
+    			<<" "<<it->getDNS().toString()<<std::endl;		
+        it++;
     }
 }
 void LogList::loadlogs(ifstream & input){
@@ -91,9 +89,9 @@ void LogList::loadlogs(ifstream & input){
         //eliminate \r.
         dns.assign(field.substr(0, field.size()-1));
 		LogEntry *entry = new LogEntry(logs.size()+1, time, host, url, defdns, dns);
-        if(!(entry->getDNS().getNumofDNS() == 0)){
-		    logs.push_back(*entry);
-        }
+        if(entry->getDNS().getNumofDNS() == 0){
+            delete entry;
+        }else{logs.push_back(*entry);}
 #ifdef DEBUG
         if(logs.size() >= D_LOAD_LENGTH){
             break;
