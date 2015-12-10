@@ -3,6 +3,7 @@
  * 本文件实现了访问日志和日志各字段的接口
  */
 #include <algorithm>//std::count
+#include <iostream>
 #include <sstream> //std::isstringstream
 #include <string>
 #include "./fields.h"
@@ -82,14 +83,14 @@ string DNSInitial::toString(){
 #ifdef DEBUG
     string s;
     for(int i = 0; i< numofdns; i++){
-        s = s +" " + seperate_dns[i];
+        s.assign(s +" " + seperate_dns[i]);
     }
     return s;
 #endif
     return dns;
 }
 DNSInitial::~DNSInitial(){
-    delete [] seperate_dns;
+    //delete [] seperate_dns;
 }
 LogEntry::LogEntry(){
     this->id = 0;
@@ -108,10 +109,10 @@ LogEntry::LogEntry(long id, string& time, string & host, string & url, string & 
 	this->dns  = new DNSInitial(dns);	
 }
 LogEntry::~LogEntry(){
-    delete this->time;
-    delete this->host;
-    delete this->url;
-    delete this->dns;
+    //delete this->time;
+    //delete this->host;
+    //delete this->url;
+    //delete this->dns;
 }
 long LogEntry::getID(){
     return this->id;

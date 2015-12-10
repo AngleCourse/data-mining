@@ -56,6 +56,7 @@ void LogList::print(int num){
 #ifndef DEBUG
     return;
 #endif
+    num = num > logs.size()?logs.size():num;
     LogEntry entry;
     std::vector<LogEntry>::iterator it1 = logs.begin();
     for(int i = 1; i <= num; i++){
@@ -81,12 +82,12 @@ void LogList::loadlogs(ifstream & input){
 		getline(input, field);
         //eliminate \r.
         dns.assign(field.substr(0, field.size()-1));
-		LogEntry entry = LogEntry(logs.size()+1, time, host, url, defdns, dns);
-        if(!(entry.getDNS().getNumofDNS() == 0)){
-		    logs.push_back(entry);
+		LogEntry *entry = new LogEntry(logs.size()+1, time, host, url, defdns, dns);
+        if(!(entry->getDNS().getNumofDNS() == 0)){
+		    logs.push_back(*entry);
         }
 #ifdef DEBUG
-        if(logs.size() > D_LOAD_LENGTH){
+        if(logs.size() >= D_LOAD_LENGTH){
             break;
         }
 #endif
