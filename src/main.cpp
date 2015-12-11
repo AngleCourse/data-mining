@@ -39,8 +39,8 @@ void testing(){
 
     cout<<"Starting to test FP-Tree building module...\n";
     testfptree(tran_ip);
-     
     cout<<"Testing done.\n";
+
     }
     
 }

@@ -19,6 +19,10 @@ typedef struct FP_Node
     struct FP_Node *father;//父亲节点
     struct FP_Node *pre_item;
     int support;
+    FP_Node()
+    {
+        this->l_child=this->r_child=this->father=this->pre_item=NULL;
+    }
 }FP_TREE;
 typedef struct Flist
 {
@@ -102,6 +106,35 @@ void FP_free(FP_Node * root)//释放fp树内存
     free(root);
 }
 
+void fp_print(FP_Node *cur)
+{
+    if(!cur)
+        return;
+    cout<<cur->ip_id<<":"<<cur->support<<",child ={";
+    FP_Node *son =cur->l_child;
+    while(son)
+    {
+        cout<<son->ip_id<<":"<<son->support<<",";
+        son=son->r_child;
+    }
+    cout<<"}"<<endl;
+    fp_print(cur->l_child);
+    fp_print(cur->r_child);
+}
+void flist_print(map<int, Flist> F)
+{
+    map<int,Flist>::iterator it;
+    for(it=F.begin();it!=F.end();it++)
+    {
+        FP_Node *cur=(*it).second.head;
+        while(cur)
+        {
+            cout<<cur->ip_id<<":"<<cur->support<<" -> ";
+            cur=cur->pre_item;
+        }
+        cout<<endl;
+    }
+}
 bool build_tree(FP_Node *root,vector<vector<int> > log_frquence)
 {
     FP_Node *p;//当前节点的父节点
@@ -125,7 +158,10 @@ int FP_growth(FP_Node * root, map<int,Flist> &head_table, vector<int>&alpha)
     {
         cur=cur->l_child;
         if(cur->r_child!=NULL)
+        {
             signal_link = false;//不是单链
+            break;
+        }
     }
     if(signal_link)
     {
@@ -137,94 +173,91 @@ int FP_growth(FP_Node * root, map<int,Flist> &head_table, vector<int>&alpha)
         map<int,Flist>::iterator it;
         for(it=head_table.begin();it!=head_table.end();++it)
         {
+            FP_Node *index=(*it).second.head;
             /*
              *在此生成 beta = i U alpha
              ...
              */
 
-            alpha.push_back((*it).second.head->ip_id);
-            vector<int> beta =alpha;
+            vector<int> beta(alpha);
+            beta.push_back(index->ip_id);
+
+            // beta.push_back(ip_id);
             /*
              *构造节点i的条件FP树,FP_Node ,Flist
              */
-            FP_Node * cond_fp=(FP_Node *)malloc(sizeof(FP_Node));
+
+            FP_Node *cond_fp=(FP_Node *)malloc(sizeof(FP_Node));
             if(cond_fp==NULL)
             {
                 cout<<"cond_fp malloc error"<<endl;
                 return -1;
             }
+            cond_fp->l_child=cond_fp->r_child=NULL;
 
-            vector <int> cond_log;
-
+            vector <int> cond_log;//条件FP树的条件模式基
             map<int, Flist>cond_Flist;//条件FP树的Flist
             cond_Flist.clear();
 
-            FP_Node *index=(*it).second.head;
+
             FP_Node *par;//表示条件模式基的路径上的节点
 
             for(;index!=NULL;index=index->pre_item)
             {
                stack<FP_Node*> cond_pattern;//index的条件模式基链
 
-               while(par=index->father)
+              par=index;
+               while(par=par->father)
+               {
                    cond_pattern.push(par);
-
+               }
                cond_log.clear();
+               cond_pattern.pop();//去除NULL节点
                while(!cond_pattern.empty())
                {
                    par=cond_pattern.top();
+//                   cout<<par->ip_id<<endl;
                    cond_log.push_back(par->ip_id);
                    cond_pattern.pop();
                }
-                FP_Node *p=cond_fp;
-                insert_link(p,cond_log,cond_Flist,index->support);//初始化每件物品支持度计数为1
+               /*
+                *if(index->support>GLB_SUP)
+                */
+
+               insert_link(cond_fp,cond_log,cond_Flist,index->support);//初始化每件物品支持度计数为1
             }
-            FP_growth(cond_fp,cond_Flist,beta);
+            if(cond_fp->l_child!=NULL)
+            {
+                FP_growth(cond_fp,cond_Flist,beta);
+                cout<<"=--==cond_fp===="<<(*it).second.head->ip_id<<endl;
+                fp_print(cond_fp->l_child);
+                cout<<"===cond_Flist==="<<endl;
+                flist_print(cond_Flist);
+
+                cout<<"beta \n";
+                vector<int> ::iterator vi;
+                for(vi=beta.begin();vi!=beta.end();vi++)
+                {
+                    cout<<" "<<(*vi);
+                }
+                cout<<endl;
+            }
             free(cond_fp);
         }
     }
 }
 
-void fp_print(FP_Node *cur)
-{
-    if(!cur)
-        return;
-    cout<<cur->ip_id<<":"<<cur->support<<",child ={";
-    FP_Node *son =cur->l_child;
-    while(son)
-    {
-        cout<<son->ip_id<<":"<<son->support<<",";
-        son=son->r_child;
-    }
-    cout<<"}"<<endl;
-    fp_print(cur->l_child);
-    fp_print(cur->r_child);
-}
-void flist_print()
-{
-    map<int,Flist>::iterator it;
-    for(it=Flist_glb.begin();it!=Flist_glb.end();it++)
-    {
-        FP_Node *cur=(*it).second.head;
-        while(cur)
-        {
-            cout<<cur->ip_id<<":"<<cur->support<<" -> ";
-            cur=cur->pre_item;
-        }
-        cout<<endl;
-    }
-}
-//testing code.
 //int main()
-int testfptree(const vector< vector<int> > &log_frequence)
+int testfptree(vector < vector<int> > & log_frquence)
 {
+    /**
     //对事物频繁项处理 输出F-list
 
     //对每个查询链路处理 排序频繁项 ，删除不频繁项
-    //vector<vector<int> > log_frquence;//外层vector存放每条log记录，内层vector存放log记录的查询路径
+    vector<vector<int> > log_frquence;//外层vector存放每条log记录，内层vector存放log记录的查询路径
 
-    /*test*/
-    /**vector<int> read;
+    //test
+    vector<int> read;
     int n,m,k;
     cin>>n;
     while(n--)
@@ -256,13 +289,17 @@ int testfptree(const vector< vector<int> > &log_frequence)
     }
     root->l_child=root->r_child=root->father=root->pre_item=NULL;
 
-    if(!build_tree(root,log_frequence))
+    if(!build_tree(root,log_frquence))
     {
         cout<<"build fp tree error!"<<endl;
         return -1;
     }
     cout<<"build"<<endl;
     fp_print(root->l_child);
-    flist_print();
+    flist_print(Flist_glb);
+    vector<int> alpha;
+    FP_growth(root,Flist_glb,alpha);
+
+    map<int,Flist>::iterator it;
     return 0;
 }
