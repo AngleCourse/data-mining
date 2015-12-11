@@ -1,7 +1,9 @@
 
+#FLAGS = -DDEBUG -DD_LOAD_LENGTH=100
 .phony: all 
+
 all:
-	g++ -g ./include/*.h ./include/*.cpp main.cpp
+	g++ -g $(FLAGS) ./include/*.h ./include/*.cpp main.cpp
 clean:
 	rm ./include/*.gch
 	rm ./a.out

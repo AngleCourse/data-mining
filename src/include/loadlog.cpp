@@ -67,11 +67,11 @@ void LogList::print(int num){
     num = (num > (int)logs.size())?logs.size():num;
     std::vector<LogEntry>::iterator it1 = logs.begin();
     for(int i = 1; i <= num; i++){
-    	std::cout<<it->getID()<<": "<<it->getTime().toString();
-        std::cout<<" "<<it->getHost().getIP()<<" "<<
-    			it->getURL().getURL()<<" "<<it->getDefaultDNS()
-    			<<" "<<it->getDNS().toString()<<std::endl;		
-        it++;
+    	std::cout<<it1->getID()<<": "<<it1->getTime().toString();
+        std::cout<<" "<<it1->getHost().getIP()<<" "<<
+    			it1->getURL().getURL()<<" "<<it1->getDefaultDNS()
+    			<<" "<<it1->getDNS().toString()<<std::endl;		
+        it1++;
     }
 }
 void LogList::loadlogs(ifstream & input){

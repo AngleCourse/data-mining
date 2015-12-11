@@ -27,9 +27,11 @@ void testing(){
     delete [] filenames;
     cout<<"Test loading module done\n";
 
+    for(int index = 0; index < num_files; index++){
+        cout<<"*****Running "<<index<<"th round: \n";
     cout<<"Starting to test Precomputing module...\n";
     map<string, int> ip_map;
-    vector<  vector<int>  > tran_ip = trans_ip_int((loglists[0]->getLogs()), ip_map);   
+    vector<  vector<int>  > tran_ip = trans_ip_int((loglists[index]->getLogs()), ip_map);   
     vector<int>  order, count;
     count_sort_ip(tran_ip, order, count);
     sort_transaction(tran_ip, order); 
@@ -39,5 +41,6 @@ void testing(){
     testfptree(tran_ip);
      
     cout<<"Testing done.\n";
+    }
     
 }

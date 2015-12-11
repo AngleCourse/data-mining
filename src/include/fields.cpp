@@ -47,7 +47,7 @@ DNSInitial::DNSInitial(string & dns){
             dns.end(), '|');
 	seperate_dns = new string[numofdns];
     if((numofdns = filter(numofdns, dns)) == 0){
-        dns.assign("");
+        (this->dns).assign("");
     }
     (this->dns).assign(dns);
 }
@@ -110,10 +110,10 @@ LogEntry::LogEntry(long id, string& time, string & host, string & url, string & 
 	this->dns  = new DNSInitial(dns);	
 }
 LogEntry::~LogEntry(){
-    delete this->time;
-    delete this->host;
-    delete this->url;
-    delete this->dns;
+    //delete this->time;
+    //delete this->host;
+    //delete this->url;
+    //delete this->dns;
 }
 long LogEntry::getID(){
     return this->id;
