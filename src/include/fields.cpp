@@ -48,6 +48,7 @@ DNSInitial::DNSInitial(string & dns){
 	seperate_dns = new string[numofdns];
     if((numofdns = filter(numofdns, dns)) == 0){
         (this->dns).assign("");
+        return;
     }
     (this->dns).assign(dns);
 }

@@ -1,5 +1,5 @@
 
-#FLAGS = -DDEBUG -DD_LOAD_LENGTH=100
+FLAGS = -DDEBUG -DD_LOAD_LENGTH=100
 .phony: all 
 
 all:
