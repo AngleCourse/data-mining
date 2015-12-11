@@ -46,6 +46,7 @@ DNSInitial::DNSInitial(string & dns){
     numofdns = std::count(dns.begin(),
             dns.end(), '|');
 	seperate_dns = new string[numofdns];
+    //下面开始过滤数据
     if((numofdns = filter(numofdns, dns)) == 0){
         (this->dns).assign("");
         return;
@@ -58,6 +59,10 @@ int DNSInitial::getNumofDNS(){
 int DNSInitial::filter(int num, string & dns){
     std::istringstream iss (dns);
     string last;
+    if(num == 1){
+        // 过滤掉只有一条DNS记录的情况
+        return 0;
+    }
     for(int i = 0; i < num && !std::getline(iss, seperate_dns[i], '|').eof();i++){
         //下面检测是否会有连续的两个或两个以上DNS服务器地址
         //这种情况是本地服务器重复请求

@@ -1,0 +1,30 @@
+Starting to test loading module...
+Starting loading log file: ../raw/CSession_01
+Data distribution: 
+Length 2 71.4858%	Length 3 17.676%	Length 4 5.62916%	Length 6 2.68855%	Length 5 1.21502%	Length 10 1.20856%	Length 7 0.0646287%	Length 8 0.0129257%	Length 11 0.00646287%	Length 0 0.0581658%	
+Loads 15473 logs in 0.285347 seconds
+Starting loading log file: ../raw/CSession_02
+Data distribution: 
+Length 2 76.1875%	Length 3 17.1205%	Length 4 5.05091%	Length 5 0.762491%	Length 6 0.608572%	Length 10 0.208383%	Length 7 0.0284158%	Length 8 0.0260478%	Length 11 0.00236798%	Length 0 0.0213119%	
+Loads 42230 logs in 0.64792 seconds
+Starting loading log file: ../raw/CSession_03
+Data distribution: 
+Length 2 75.2849%	Length 3 18.1285%	Length 4 4.91948%	Length 5 0.76315%	Length 6 0.498255%	Length 10 0.340579%	Length 7 0.0462515%	Length 8 0.00840937%	Length 9 0.00420468%	Length 11 0.00210234%	Length 0 0.0210234%	
+Loads 47566 logs in 0.711365 seconds
+Starting loading log file: ../raw/CSession_28
+Data distribution: 
+Length 2 74.6185%	Length 3 17.4954%	Length 4 4.85797%	Length 6 1.43114%	Length 5 0.836969%	Length 10 0.700764%	Length 7 0.0414536%	Length 8 0.0138179%	Length 9 0.00197398%	Length 0 0.0177658%	
+Loads 50659 logs in 0.802003 seconds
+Starting loading log file: ../raw/CSession_29
+Data distribution: 
+Length 2 75.2135%	Length 3 18.1535%	Length 4 4.70668%	Length 6 0.805526%	Length 5 0.681%	Length 10 0.371632%	Length 7 0.0389143%	Length 15 0.00972857%	Length 8 0.00778286%	Length 12 0.00389143%	Length 9 0.00194571%	Length 0 0.0214029%	
+Loads 51395 logs in 0.814568 seconds
+Starting loading log file: ../raw/CSession_30
+Data distribution: 
+Length 2 74.3949%	Length 3 18.5764%	Length 4 4.94237%	Length 5 0.842634%	Length 6 0.8082%	Length 10 0.382831%	Length 7 0.0405113%	Length 9 0.00607669%	Length 8 0.00405113%	Length 13 0.00202556%	Length 0 0.0202556%	
+Loads 49369 logs in 0.764789 seconds
+Starting loading log file: ../raw/CSession_31
+Data distribution: 
+Length 2 71.3654%	Length 3 18.5375%	Length 4 5.93092%	Length 6 1.88343%	Length 5 1.19266%	Length 10 1.00917%	Length 7 0.0539665%	Length 8 0.0107933%	Length 12 0.00539665%	Length 0 0.0485699%	
+Loads 18530 logs in 0.322432 seconds
+Testing done.

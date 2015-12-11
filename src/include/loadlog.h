@@ -3,6 +3,7 @@
 #define LOADLOG_H
 #include <fstream>
 #include <vector>
+#include <map>
 #include "./fields.h"
 
 
@@ -42,8 +43,20 @@ class LogList{
          * Load log file from the specified input.
          */
         void loadlogs(std::ifstream & input);
+        /**
+         * Calculate the statistical characteristics.
+         * Including data distribution.
+         */
+        void calStatis(LogEntry & entry);
+        /**
+         * Print the statistical information.
+         */
+        void printStatis();
         std::vector<LogEntry> logs;
         std::vector<LogEntry>::iterator it;
+        // The following is for statistical usage.
+        // pair<length, number_of_entries_with_length>
+        std::map<int, int> count;
 };
 /**
  * 从给定的文件中读出所有日志, num 指定日志文件的数量

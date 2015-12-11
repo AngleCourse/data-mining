@@ -1,7 +1,9 @@
 #include <iostream>
+#include <algorithm> // find
 #include <fstream>
 #include <vector>
 #include <ctime> //clock, clock_t, CLOCKS_PER_SEC
+#include <map>
 #include "./fields.h"
 #include "./loadlog.h"
 //#define DEBUG
@@ -11,7 +13,7 @@ using std::ifstream;
 using std::getline;
 
 // 容器的默认容量
-const long INITIAL_SIZE = 200000;
+const long INITIAL_SIZE = 40000;
 
 
 LogList** loadfiles(string* files, int num){
@@ -24,11 +26,12 @@ LogList** loadfiles(string* files, int num){
             continue;
         }
         ifstream input(files[i].c_str(), std::ifstream::in);
-        std::cout<<"Starting loading log file: "<<files[i];
+        std::cout<<"Starting loading log file: "<<files[i]
+            <<"\n";
         t = clock();
         LogList* log = new LogList(input);
         t = clock()-t;
-        std::cout<<", loads "<< log->getNumofLogs() <<" logs in "
+        std::cout<<"Loads "<< log->getNumofLogs() <<" logs in "
             <<((float)t)/CLOCKS_PER_SEC<<" seconds\n";
 
         loglists[i] = log;
@@ -74,6 +77,35 @@ void LogList::print(int num){
         it1++;
     }
 }
+void LogList::calStatis(LogEntry & entry){
+    int key = entry.getDNS().getNumofDNS();
+    if(count.find(key) == count.end()){
+        count.insert(std::pair<int, int> (key, 1));
+    }else{
+        count[key] = count[key]+1;
+    }
+    
+     
+}
+void LogList::printStatis(){
+    std::cout<<"Data distribution: \n";
+    std::map<int, int> temp;
+    for(std::map<int, int>::iterator it = count.begin();
+            it != count.end(); ++it){
+        temp.insert(std::pair<int, int>(it->second, it->first));
+    }
+    int num = 0;
+    for(std::map<int, int>::reverse_iterator it = temp.rbegin();
+            it != count.rend(); ++it){
+        if(num++ > temp.size()){
+            break;
+        }
+        std::cout<<"Length "<<it->second<<" "
+            <<(((float) it->first)/logs.size()) * 100
+            <<"%\t";
+    }
+    std::cout<<"\n";
+}
 void LogList::loadlogs(ifstream & input){
 	string field;
 	string time, host, url, defdns,dns;
@@ -91,7 +123,12 @@ void LogList::loadlogs(ifstream & input){
 		LogEntry *entry = new LogEntry(logs.size()+1, time, host, url, defdns, dns);
         if(entry->getDNS().getNumofDNS() == 0){
             delete entry;
-        }else{logs.push_back(*entry);}
+        }else{
+            logs.push_back(*entry);
+#ifdef DEBUG_STATISTICS
+        calStatis(*entry);
+#endif
+        }
 #ifdef DEBUG
         if(logs.size() >= D_LOAD_LENGTH){
             break;
@@ -100,6 +137,9 @@ void LogList::loadlogs(ifstream & input){
 	}	
 #ifdef DEBUG
     this->print(D_LOAD_LENGTH);
+#endif
+#ifdef DEBUG_STATISTICS
+    this->printStatis();
 #endif
 }
 
